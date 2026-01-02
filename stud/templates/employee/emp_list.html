@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee List</title>
+</head>
+<body>
+    <h1>All Employees</h1>
+
+
+<form method="get">
+    <input type="text" name="q" placeholder="Search by name" value="{{ query }}">
+    <button type="submit">Search</button>
+</form>
+
+    <a href="{% url 'emp_add' %}">Add New Employee</a>
+
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }} | 
+    <form method="post" action="{% url 'logout' %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+    </p>
+{% else %}
+    <a href="{% url 'login' %}">Login</a>
+{% endif %}
+
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>phone_no</th>
+            <th>city</th>
+            <th>Actions</th>
+        </tr>
+        {% for employee in employees %}
+        <tr>
+            <td>{{ employee.name }}</td>
+            <td>{{ employee.age }}</td>
+            <td>{{ employee.phone_no }}</td>
+            <td>{{ employee.city }}</td>
+            <td>
+                <a href="{% url 'emp_edit' employee.pk %}">Edit</a> |
+                <a href="{% url 'emp_del' employee.pk %}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div>
+    {% if employees.has_previous %}
+        <a href="?q={{ query }}&page={{ employees.previous_page_number }}">Previous</a>
+    {% endif %}
+
+    Page {{ employees.number }} of {{ employees.paginator.num_pages }}
+
+    {% if employees.has_next %}
+        <a href="?q={{ query }}&page={{ employees.next_page_number }}">Next</a>
+    {% endif %}
+</div>
+</body>
+</html>
