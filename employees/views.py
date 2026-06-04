@@ -16,6 +16,7 @@ def is_admin(user):
 
 def signup(request):
     if request.method == "POST":
+        print("@@@@@@@@@@@@")
         form = SignUpForm(request.POST)
         print("form")
         if form.is_valid():
@@ -25,10 +26,13 @@ def signup(request):
             user.save()
 
             group, created = Group.objects.get_or_create(name="User")
+            print(group,created,"$$$$$$$$$$$$$$$")
             user.groups.add(group)
+            print("##############")
 
             login(request, user)
-            return redirect("login")
+            print(login, "***************")
+            return redirect("login_user")
     else:
         form = SignUpForm()
 

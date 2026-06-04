@@ -9,25 +9,32 @@ from .models import Expense
 from .forms import ExpenseForm
 
 
+
+
 # ---------------- AUTH ----------------
-
-
 def signup(request):
     if request.method == "POST":
+        print("@@@@@@@@@@@@")
         username = request.POST["username"]
         password = request.POST["password"]
+        print(username, password,"$$$$$$$$$$$$")
 
         if not User.objects.filter(username=username).exists():
             User.objects.create_user(username=username, password=password)
-            return redirect("login")
+            print(User.objects.create_user, "!!!!!!!!!!!!!!!!!!!!")
+        return redirect("login_viewer")
 
     return render(request, "expense/signup.html")
 
 
+
+
 def login_view(request):
     if request.method == "POST":
+        print("[{...................}]")
         username = request.POST["username"]
         password = request.POST["password"]
+        print("###############")
 
         user = authenticate(request, username=username, password=password)
         if user:
@@ -37,10 +44,15 @@ def login_view(request):
     return render(request, "expense/login.html")
 
 
+
+
+
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect("login")
+    print(logout)
+    return redirect("login_viewer")
+
 
 
 # ---------------- DASHBOARD ----------------
@@ -63,6 +75,7 @@ def dashboard(request):
     total_amount = expenses.aggregate(Sum("amount"))["amount__sum"] or 0
 
     # ADD EXPENSE
+
     if request.method == "POST":
         form = ExpenseForm(request.POST)
         if form.is_valid():
@@ -88,6 +101,9 @@ def dashboard(request):
 # ---------------- DELETE ----------------
 
 
+
+
+
 @login_required
 def delete_expense(request, pk):
     expense = get_object_or_404(Expense, pk=pk, user=request.user)
@@ -96,6 +112,9 @@ def delete_expense(request, pk):
 
 
 # ---------------- EDIT ----------------
+
+
+
 
 
 @login_required
@@ -113,6 +132,9 @@ def edit_transaction(request, pk):
     return render(
         request, "expense/edit_expense.html", {"form": form, "expense": expense}
     )
+
+
+
 
 
 @login_required

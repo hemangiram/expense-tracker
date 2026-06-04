@@ -8,7 +8,7 @@ urlpatterns = [
     path("del/<int:pk>", views.delete_expense, name="delete_expense"),
     path("edit/<int:pk>/", views.edit_transaction, name="edit_expense"),  # New URL
     path("signup/", views.signup, name="signup"),
-    path("login/", views.login_view, name="login"),
+    path("login/", views.login_view, name="login_viewer"),
     path("logout/", views.logout_view, name="logout"),
     
 ]
